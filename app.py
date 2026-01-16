@@ -159,7 +159,7 @@ with st.spinner("Generating map..."):
 
 # 4. Display map
 if m:
-    st_folium(m, width="100%", height=600)
+    st_folium(m, width="100%", height=400)
 else:
     st.warning("No points match the selected filters.")
 
