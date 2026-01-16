@@ -7,12 +7,12 @@ from streamlit_folium import st_folium
 st.set_page_config(layout="wide", page_title="Crop Tour Soja - Mapa")
 
 st.title("🌱 Mapa de Coleta: Crop Tour Soja")
-import os
-if os.path.exists("crop_tour_soja.xlsx"):
-    st.success("Arquivo Excel encontrado!")
-else:
-    st.error("ERRO: Arquivo crop_tour_soja.xlsx NÃO encontrado no servidor!")
-    st.write("Arquivos presentes na pasta:", os.listdir("."))
+# import os
+# if os.path.exists("crop_tour_soja.xlsx"):
+#     st.success("Arquivo Excel encontrado!")
+# else:
+#     st.error("ERRO: Arquivo crop_tour_soja.xlsx NÃO encontrado no servidor!")
+#     st.write("Arquivos presentes na pasta:", os.listdir("."))
 
 # 1. Carregar os dados
 @st.cache_data
