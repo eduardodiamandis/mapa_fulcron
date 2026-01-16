@@ -69,7 +69,7 @@ df_filtered = df[
 # Statistics
 st.sidebar.markdown("---")
 st.sidebar.markdown("Statistics")
-st.sidebar.metric("Total points", len(df_filtered))
+st.sidebar.metric("Total samples", len(df_filtered))
 
 
 # 3. Map creation

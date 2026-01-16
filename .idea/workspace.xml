@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="comentado">
-      <change beforePath="$PROJECT_DIR$/.idea/mapa_fulcron.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mapa_fulcron.iml" afterDir="false" />
+    <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="now the photos are saved in fotos directory">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
@@ -93,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1768588937049</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="now the photos are saved in fotos directory">
+      <option name="closed" value="true" />
+      <created>1768594565984</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1768594565984</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -111,6 +118,7 @@
     <MESSAGE value="adicionado para rodar no streamlit cloud" />
     <MESSAGE value="adicionado para teste de pub" />
     <MESSAGE value="comentado" />
-    <option name="LAST_COMMIT_MESSAGE" value="comentado" />
+    <MESSAGE value="now the photos are saved in fotos directory" />
+    <option name="LAST_COMMIT_MESSAGE" value="now the photos are saved in fotos directory" />
   </component>
 </project>
