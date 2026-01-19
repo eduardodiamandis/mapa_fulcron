@@ -14,6 +14,11 @@ FOTOS_DIR = Path("fotos")
 @st.cache_data
 def load_data():
     df = pd.read_excel("crop_tour_soja.xlsx")
+    # Corrige problemas de acentuação na coluna localidade_
+    if 'localidade_' in df.columns:
+        df['localidade_'] = df['localidade_'].apply(
+            lambda x: x.encode('latin-1').decode('utf-8') if isinstance(x, str) else x
+        )
     df = df.dropna(subset=['latitude', 'longitude'])
     # Add sequential ID column
     df.insert(0, 'ID', range(1, len(df) + 1))
@@ -239,7 +244,7 @@ if len(df_filtered) > 0:
                     st.image(
                         str(foto_path),
                         caption=f"Photo ID: {foto1_id}",
-                        use_container_width=True
+                        width='stretch'
                     )
                 else:
                     st.info(f"Photo not found: {foto1_id}")
@@ -253,7 +258,7 @@ if len(df_filtered) > 0:
             df_filtered[['ID', 'localidade_', 'estadio_fenologico',
                          'graosha_k', 'condicao_da_lavoura',
                          'latitude', 'longitude']],
-            use_container_width=True,
+            width='stretch',
             height=400
         )
 else:
