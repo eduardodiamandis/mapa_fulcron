@@ -14,13 +14,36 @@ FOTOS_DIR = Path("fotos")
 @st.cache_data
 def load_data():
     df = pd.read_excel("crop_tour_soja.xlsx")
-    # Corrige problemas de acentuação na coluna localidade_
-    if 'localidade_' in df.columns:
-        df['localidade_'] = df['localidade_'].apply(
-            lambda x: x.encode('latin-1').decode('utf-8') if isinstance(x, str) else x
-        )
+
+    # 1. Remove espaços invisíveis nos nomes das colunas
+    df.columns = df.columns.str.strip()
+
+    # 2. Dicionário de tradução: 'Nome no Excel': 'Nome que o Código espera'
+    # Adicionamos todas as variações possíveis para evitar novos erros
+    mapping = {
+        '_latitude': 'latitude',
+        '_longitude': 'longitude',
+        'localidade': 'localidade_',
+        'localidade_': 'localidade_'  # Garante que se já estiver certo, não mude
+    }
+
+    # Aplica a renomeação
+    df = df.rename(columns=mapping)
+
+    # 3. Verificação de segurança (caso o nome mude para algo totalmente diferente)
+    if 'latitude' not in df.columns or 'longitude' not in df.columns:
+        st.error("Erro: Colunas de coordenadas não encontradas!")
+        st.write("Colunas detectadas:", df.columns.tolist())
+        st.stop()
+
+    # 4. Remove linhas sem coordenadas
     df = df.dropna(subset=['latitude', 'longitude'])
-    # Add sequential ID column
+
+    # 5. Garante que os dados de texto não quebrem o mapa
+    if 'localidade_' in df.columns:
+        df['localidade_'] = df['localidade_'].fillna("Desconhecido").astype(str)
+
+    # 6. Adiciona o ID sequencial
     df.insert(0, 'ID', range(1, len(df) + 1))
     return df
 

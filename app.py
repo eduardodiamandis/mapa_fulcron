@@ -14,7 +14,7 @@ FOTOS_DIR = Path("fotos")
 @st.cache_data
 def load_data():
     df = pd.read_excel("crop_tour_soja.xlsx")
-    # Corrige problemas de acentuação na coluna localidade_
+    # Encoding
     if 'localidade_' in df.columns:
         df['localidade_'] = df['localidade_'].apply(
             lambda x: x.encode('latin-1').decode('utf-8') if isinstance(x, str) else x
@@ -96,21 +96,6 @@ def create_lightweight_map(df_data):
     )
 
     for _, row in df_data.iterrows():
-        # --- LÓGICA SEMAFÓRICA ---
-        condition_str = str(row['condicao_da_lavoura']).strip().lower()
-
-        if "bom" in condition_str:
-            color = "green"
-            icon = "check-circle"  # Ícone de sucesso
-        elif "regular" in condition_str:
-            color = "orange"  # Ou "cadetblue" se quiser algo menos urgente
-            icon = "exclamation-circle"
-        elif "ruim" in condition_str:
-            color = "red"
-            icon = "times-circle"  # Ícone de erro/alerta
-        else:
-            color = "gray"
-            icon = "question-circle"
         popup_html = f"""
         <div style='width: 240px; font-family: Arial, sans-serif; font-size: 13px;'>
             <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -179,7 +164,7 @@ with st.spinner("Generating map..."):
 
 # 4. Display map
 if m:
-    st_folium(m, width="100%", height=400)
+    st_folium(m, width="100%", height=600)
 else:
     st.warning("No points match the selected filters.")
 
@@ -259,7 +244,7 @@ if len(df_filtered) > 0:
                     st.image(
                         str(foto_path),
                         caption=f"Photo ID: {foto1_id}",
-                        width="stretch"
+                        width='stretch'
                     )
                 else:
                     st.info(f"Photo not found: {foto1_id}")
@@ -273,7 +258,7 @@ if len(df_filtered) > 0:
             df_filtered[['ID', 'localidade_', 'estadio_fenologico',
                          'graosha_k', 'condicao_da_lavoura',
                          'latitude', 'longitude']],
-            width="stretch",
+            width='stretch',
             height=400
         )
 else:
