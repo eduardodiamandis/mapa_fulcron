@@ -13,12 +13,8 @@ FOTOS_DIR = Path("fotos")
 # 1. Load data
 @st.cache_data
 def load_data():
-    df = pd.read_excel("crop_tour_soja.xlsx")
+    df = pd.read_csv("crop_tour_soja.csv")
     # Encoding
-    if 'localidade_' in df.columns:
-        df['localidade_'] = df['localidade_'].apply(
-            lambda x: x.encode('latin-1').decode('utf-8') if isinstance(x, str) else x
-        )
     df = df.dropna(subset=['latitude', 'longitude'])
     # Add sequential ID column
     df.insert(0, 'ID', range(1, len(df) + 1))

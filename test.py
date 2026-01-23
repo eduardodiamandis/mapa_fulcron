@@ -13,7 +13,7 @@ FOTOS_DIR = Path("fotos")
 # 1. Load data
 @st.cache_data
 def load_data():
-    df = pd.read_excel("crop_tour_soja.xlsx")
+    df = pd.read_csv("crop_tour_soja.csv")
 
     # 1. Remove espaços invisíveis nos nomes das colunas
     df.columns = df.columns.str.strip()

@@ -5,240 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/mapa_fulcron.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mapa_fulcron.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crop_tour_soja.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/crop_tour_soja.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/00a8b8ed-4776-4c56-ad2c-be0662eb8057.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/028de99d-6bf7-432f-812b-95ee06dd8efa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/03df86e3-844a-439b-8d21-4dc79dd40ce4.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0636d1e1-f4ef-4991-a5d2-1528c31c3594.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/078c8f57-5e7d-4cd4-8042-1955e254b20a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/089be09d-5b96-4d36-8b68-72940ba69032.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/08ae038d-67ac-43f0-a557-a632e704188e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/08ff7362-15bc-4136-b893-ee00c28d394d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0c228637-fecd-45c7-90a1-49a00b0e7dfb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0c9eadbe-fbe1-4629-a90b-3bfa4596649c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0d26c872-93c2-4cdf-8bf6-3e73285353e6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0ecc5f87-4f9e-4c18-b392-b7f682124c50.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0ee47d88-277e-469d-bbf3-432caa4e65e9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/0ffacb53-2225-4cf9-8659-91ffc6977924.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1118d4dd-04cd-4ea6-b6ac-4c415d58cd2a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/11485b1f-9aad-4797-93e3-ff3c4687cce7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1261c4eb-edc9-49a1-b5df-0b02ad1ea671.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/13c88faf-a8d0-4db9-b40b-c881ba1ef4b6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/146db699-42d9-4744-9160-299be688b4c5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/153b8b5f-c13f-47ae-8524-986de682f630.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/17acad63-19ba-48c6-a51d-f3f4900092f8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/19a00256-7cdb-4706-b951-6dbf0f3315b6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1b658b68-2dff-4504-8d4b-b45f2d65ca79.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1c1a3e36-c59f-4709-92ac-8dec06a2f723.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1c6e69cc-209c-4a75-a49d-4bd930b2a3e9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1c8f8ef1-ccbb-43f4-af22-2fb7511bf326.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1dc252a7-41a0-41dd-a83e-278f60c829f0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1e4a96bc-f970-4f77-80b2-fcc60fd4168e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/1f7ddb09-d036-430d-bc4b-285d53535f73.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/212696c8-2a77-41af-ac9a-2627c170ad60.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/229dbf8a-3336-4649-a3f8-af1a845092b6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/22e6835f-49f6-4814-87fe-ec0186e2a041.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/23438048-f24d-4b86-a18c-ee6d1ff2196e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/260281b5-23a1-4a45-8601-951ec2b1deb9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/261b2376-6eda-49d6-af16-f35793525b7a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/271e1638-1d02-49a4-858e-a4bbb14f9270.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/28dd449f-18e8-4700-956e-df1df85fed1e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/301a89ad-db29-4146-9958-97aeaaa4d46b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3074810f-8fd3-4ba3-8379-925b4da491cd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/307c5889-aac5-4174-86ca-cfcf4d48f9ef.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3107064e-89e8-43b6-be39-76c99337b5ec.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/318ba9dc-135f-4c76-b67c-d1bc6101b075.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/328c1d16-bbd5-44aa-9b2b-a1d62a0aa93c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/32a71398-8917-4366-9a5e-4809fb595b2b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3342c28d-05e7-4480-a570-1c4b994a8bea.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/336b425c-a372-4582-9514-dc610a226563.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/33df6035-aeea-4800-ac35-69290921378d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/34529f63-442e-4f75-abd2-e154be6646ca.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/34961999-6d32-404f-a04c-424b6d725c95.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3523eeb7-c38b-4c2f-9593-a337ec2336b3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/35a4912f-52ac-4766-ae0b-728d8b67da6a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/35e548bb-c5b0-45d4-8f7d-4cbca4a12b06.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/37237566-a3e3-40e3-b5fc-4c1b84555be0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/37bc336a-b393-46ce-a03b-eec078e7a936.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/39a08c80-d1c1-4b94-822e-427bf2508dff.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3a7b87ee-b94e-4e69-a655-3674d62640e5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3b207ce7-c35a-4f7e-90ad-367f246f9da3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3b93162b-9116-4c45-b941-ffa01664c627.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3bddf0d2-7542-4f1d-b3fe-b42deb272758.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3c0f92ec-698a-40af-a949-41b85674e662.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3ca49832-f3bf-417e-b230-4b7a12eacd45.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3dd67453-2c9b-4d0c-b431-d0e99a4a537a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/3edf24e3-066e-47b6-840f-9b7320a7d67d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4071374e-1304-436f-a6ff-7ac30c9db398.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4092ee35-79af-4233-9911-074e478a2d50.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/411b1f38-7020-4567-97c0-70cd7435fced.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/41f034b5-504f-4dc8-815f-2e95ce9b34f0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4348c554-4a92-4dd7-8324-196393c2a56d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/435c6c46-34ac-4863-bffc-84ca9cd1c934.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4377d9fe-48d1-4099-9438-e19879ac30f7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/43e65863-c392-4e71-887c-ba8c4868624d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/447c294c-c395-4bdc-9f8c-ffde35c14c7b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/44bd2ad4-a84c-4c92-9b36-c1d1c20e60fa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/465c03b5-78e9-4e7f-a553-bf053282000a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/469ec6a4-511d-477b-bf9f-adc0e5c3902e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/46d4a11d-44cc-4b14-8933-481c91be343b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4d6fb27b-b116-4569-8f81-7560526a5d9a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/4ea4c28f-1a4a-4509-8576-089cc12d02ea.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5109199d-2046-4528-95d2-e9efb2e4aadb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/55aa20f5-61c1-4fd6-9276-d8c7bd0af27c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/56ed868f-8d84-4c30-9926-c0c988d2e016.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/58dc9bd5-74e2-4e75-8b96-9e01f10ffdad.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5aedbc3b-3c24-42d1-9ecc-04965d512018.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5b308344-42b9-4209-a742-8b30df8f812a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5dea41bd-6835-43a3-9938-64d5391ff368.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5f46ad3d-26a5-4ae2-869b-3a3831f645f7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/5f9f5d6e-a13e-43a3-9334-bb7d91f44b69.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6022b785-b159-46ff-b383-ff18772652f6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6095337e-0254-4db8-b6e7-38d4c86422f1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/612af780-fd2c-4948-9bf1-0736add3c7d6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/614ee268-29c6-4913-b0d4-6aa06ff99e2d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/621985ce-cad0-4a73-9904-2767745fb0bd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/62f0b35e-e66a-4800-b3d1-63696190002a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6375f695-517d-47f6-9ba7-1e4a80068c6a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/638b6718-dba7-45b3-89f5-1bebfe94e0c2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/639312aa-b147-4882-9d74-1a8e40cde890.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/63d61cca-11d4-4439-b6f6-51e839eb36dd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/63e93729-29d4-4f6e-8b58-ecca884accf7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/65f7ee13-1da0-4981-a0f8-6484811cf932.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/66d7ad92-4b85-4824-a0cb-731f4c14ee3c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/67af630b-6805-4ca9-bbb0-8591b3cde9d0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/696f3fea-7503-4d2e-9751-db8b03ecd366.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6a739222-1ea3-4cd5-a446-cca481419922.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6bafd087-8417-43c5-ab42-d7e85e50b195.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6c441b68-9d0d-4465-a681-df098d6dad60.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6d03c343-e139-4cd3-81be-d7734faefd8f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6ec8497b-6b98-4a53-82fb-b1cdf7668a8c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6eca541f-2fff-46b6-82d7-8790d8a05925.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6f5a7140-0255-408b-bcfa-5f60a0c0c005.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/6f897f5d-7c33-4f2f-ac7f-6151389f0c24.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/70aec33e-c8b0-4e63-b7ba-a4536495022c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/70cd58c0-aefa-4a7d-bb7f-99314e3656fd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/71556782-eb59-4af1-bf7e-9500a7b92903.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/715b97e0-9315-404a-85d1-fba9f5ade274.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/72330c6f-f29b-4f81-926a-52c89b8f91c9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/723e7172-cec1-4bf6-a80f-aaa36ef9913a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/72c88a16-cd11-4b40-aa53-b48da3876d88.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/72e40945-b7ef-46f8-befd-0e44a98524ee.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/752f4134-0bc7-4890-bcfa-2b11d07a10a7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/75e09675-c515-42ca-8b85-78416bceb7ad.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/76a3a483-50ab-4ace-a8f6-1f3e32e95081.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/770e25fd-2fd4-4d09-b7e4-7cdbe2915057.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/79c5bd6f-7a09-4219-9c8a-81110b71ce36.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7b4f3e39-11c4-48af-81ca-ebe6563a052c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7b6b777a-52cc-42c9-99cd-eb7871732d69.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7c2f1303-6c27-4c3d-8cb1-2dfb6c6e7700.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7c7e63c9-4412-4961-a092-72bee922ae99.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7cb464c6-b390-4a52-9a27-407dea8e4986.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7dc5e98d-c07a-4ed6-9432-f6a0ea401ef9.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7e2f05db-83e8-4792-8646-46320b39a0e5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7e70c516-8916-4967-a30e-ac277deb6fc3.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/7fceeecb-e490-40f0-92da-503d24868696.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/812267c2-107d-453a-9eea-273468c64eaa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/8155dca8-cb9e-45c9-bd0e-b420c5c11b62.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/81c67d83-27c0-473b-ac60-6e8677a93ce2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/859f91d0-43e3-4f8c-af6e-9b5f4f7ac630.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/86ddd8e5-8325-4cac-8a95-a4f0647154ba.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/89ebf3e4-7b98-4c7a-81a3-e50e00c0ead5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/8acc34d5-15f6-402e-82da-838ec6e18483.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/8d5dea8e-b234-4a17-b184-2fae95aa42af.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/8f52fdbf-b333-403c-bdbc-97c3d664249c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/901d7a9e-7256-4874-b4f5-66f8b33d5227.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/9078e9c3-564d-4aff-9167-122a8a986594.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/927a75b7-55cf-4f32-a3df-6d67f82ae26a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/92a14b8e-f5c8-4b83-a79d-9bea218a81dc.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/92c5e9fc-4c52-45c4-9752-a82c07dec9ed.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/92ce7c10-512f-4e50-90ea-fabc4ddf6654.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/933bc4fa-ce3a-4345-a747-8bf566bca3aa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/943f066b-5d27-49da-a7be-9e53661f0c0c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/94f099db-e95a-4f2f-aa0d-94d0713d09c5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/95ba20ff-c25b-47ee-8b98-e3c85e00e3fb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/96cc4d4a-3aac-4a54-888d-1178fdbfcdc5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/9795f98a-2a56-42ab-bf46-0426fa93cb66.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/98ec521a-8490-4753-9163-a9d7842a5416.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/9b60fdbe-1486-47b3-8a80-276a8862212b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/9b90eec0-f008-4877-b1d6-40d1790136a7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/9f147b4c-5450-497a-97ad-e4eb943f0464.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a03d9a48-0853-4822-8e31-c70bebb38c9b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a16a67eb-c68c-4dce-bbba-dc1d01694c14.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a288882c-b72a-4e4d-929e-d5f25d93dfdc.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a3e99a99-f0d0-44aa-9fff-a873c6fdd76c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a7ca4c4e-8798-402b-b19e-39c6c0787ea1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a8a93f69-ab5f-42b3-9362-74afd6d0fc66.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a9401068-0c1e-41ba-9c83-f10ed0cc67bf.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/a97df962-3235-4be1-9259-d33a72301db6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ab2b5936-09c6-4891-82df-1ad2981e9b4b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ab5646f0-b850-4377-bc30-2c9490b6d2ec.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ac0b4812-76b1-4183-822f-57a1d24b5ce6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ad23386c-2b81-40c2-b6a9-591aecd86c30.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b00ddb69-a474-4a84-bbfb-3012139e744a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b1ad7a79-1667-42ff-9e2e-6d27420e91e8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b28ad2b6-1566-4924-b3c7-7b4ad33358aa.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b2daae80-9b81-4288-a00f-cdcec02b3a07.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b5e1a83c-b374-477b-9f25-10f2dc0c91f1.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b5e46e6d-eddb-456a-8837-be4d9003dbe5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b9555311-613c-4c6b-baee-c31f401ceda7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/b9981d50-be52-4fe9-8835-ec005bcd03bb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/bb0fe6ca-8f51-4f36-b426-72fbdc11235e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/bbc1d505-af77-4820-9370-c3246b05261f.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/bcf48dc6-529f-4372-947f-33c0dcc95d36.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/bd2df6ed-1b2c-44fb-a136-cb7c6a2290e5.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/be2d8962-b8c5-4b86-9ca3-29f619b62b64.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/be43e310-de3b-47ab-b52f-6bb4ba74275a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/bf965040-930e-419b-a05b-4f51e6db0d41.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c0261cdc-c3e5-4184-90b7-31400c27fe07.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c02e055e-1679-4b63-9465-9a2465f1ea5d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c0406ecf-e8a3-47fe-b77c-69bc2507c1a8.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c0b13f96-8fb1-4ab0-a049-f1217e2e2bef.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c115123a-7731-4823-887d-d8bec3c22886.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c1af9936-f07e-4c52-ab3f-703c9e9a4540.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c2750253-b83b-47ce-a61a-314b1a91aee0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c57a8f42-19a0-4c65-88f8-f8ea11f72bbb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c84d1580-7055-445a-a813-f723414abb92.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/c8f3331b-65df-42a9-bd1d-17315a171eab.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/cb3d070b-7710-44db-8713-8b54be420693.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ce7ae1fa-5550-4ee1-86c3-342f7271f575.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/cfcdd2e0-8873-42db-bb39-afcb0264de6b.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d0589951-785a-4212-a1d7-d1120dca75d2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d08ca233-bea0-48ea-a3f0-772a08979470.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d14a75dd-5054-41e6-ac8f-97f923325493.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d24e80e2-4696-4bc3-be1e-6b84b6331393.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d4c80d52-ae50-4156-b725-7799f49ff9bf.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d56fa037-bf2a-4157-b4c9-30ecc18342df.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d5ad2af7-4ae5-4ce3-8935-e5e3aea9e4d2.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d69cc9d6-52ce-44d0-a0e8-ec5eacd1c3ec.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/d7f63d9c-a11e-40dc-9c69-c6e24bc230a7.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/da3b37c4-0f66-4b98-b531-6390fe95b82a.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/dd326f89-f435-4912-a5b8-d386197b45bf.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/dd5a3256-e499-47a6-8297-224f49995c69.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/e451ae5b-baed-45df-8030-9b3127e78146.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/e8f06c0d-6ccf-40f4-88a6-94b5bf2aa244.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/e914b502-b58f-4592-aec2-905123730ddf.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ebafd407-f2a6-4acf-a966-18f4a2e9c676.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ecbb674b-494d-420b-aa1a-cea2755c0611.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/eee53f15-c26f-4e36-aedb-36768cb89c47.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ef1a4bcc-e9fe-49dd-9a87-76cde36df38e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/ef7f88a4-d37c-4889-b65a-1e6513c23b51.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f383c004-64e4-4ff9-a908-f71c5636dcc0.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f3e436c5-b15e-40cf-86fa-8d59c20fc6e6.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f3f5146f-64a5-4c59-994e-cfaf84bfe961.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f5316861-8188-43ea-8efb-e2c4c6f3da1e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f59bb461-de4f-4132-8466-805b3d10ee68.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f8ffef89-29cf-4c19-b052-3d5bb3932021.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/f9650783-d8e0-4484-bccb-29c4176402bd.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/fcfcfa61-06ad-4422-9c14-6abb8b72ea1e.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/fd1ade73-e921-47e8-b865-165a47fe9b46.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/fe859084-7eb6-4b84-897f-2c3b8937592c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/fef25f19-d297-46e9-bca0-87c7cb264021.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fotos/fef2cae7-d7b1-4a1d-9019-3ddfe7352998.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/~$crop_tour_soja.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -275,20 +45,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.test.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.test.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-fc1d50d2d915-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.24978.54" />
+        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-PY-252.25557.178" />
+        <option value="bundled-python-sdk-ce6832f46686-7b97d883f26b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.25557.178" />
       </set>
     </attachedChunks>
   </component>
@@ -300,6 +80,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1768584182666</updated>
+      <workItem from="1769186856378" duration="644000" />
     </task>
     <task id="LOCAL-00001" summary="adicionado para rodar no streamlit cloud">
       <option name="closed" value="true" />
@@ -327,6 +108,9 @@
     </task>
     <option name="localTasksCounter" value="4" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
