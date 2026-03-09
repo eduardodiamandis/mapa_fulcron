@@ -1,270 +1,272 @@
 import streamlit as st
 import pandas as pd
-import folium
+import pydeck as pdk
 from pathlib import Path
-from streamlit_folium import st_folium
 
-# Page configuration
-st.set_page_config(layout="wide", page_title="Soybean Crop Tour - Map")
-st.title("Sample Collection Map: Soybean Crop Tour")
+# --- CONFIGURAÇÃO DA PÁGINA ---
+st.set_page_config(layout="wide", page_title="Crop Tour Soja - Performance Mode")
+
+st.markdown("""
+<style>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .detail-card { animation: fadeInUp 0.35s ease; }
+    .stDeckGlJsonChart > div { border-radius: 10px; overflow: hidden; }
+</style>
+""", unsafe_allow_html=True)
+
+st.title("Mapa de Amostragem: Crop Tour Soja 2026")
 
 FOTOS_DIR = Path("fotos")
 
-# 1. Load data
+# --- 1. DADOS ---
 @st.cache_data
 def load_data():
     df = pd.read_csv("crop_tour_soja.csv")
-    # Encoding
+    df.columns = df.columns.str.strip()
+    df = df.rename(columns={'_latitude': 'latitude', '_longitude': 'longitude', 'localidade': 'localidade_'})
     df = df.dropna(subset=['latitude', 'longitude'])
-    # Add sequential ID column
+
+    valores_validos = ["1. Muito Ruim", "2. Ruim", "3. Media", "4. Boa", "5. Excelente"]
+    df = df[df['condicao_da_lavoura'].isin(valores_validos)]
+
+    color_map = {
+        "1. Muito Ruim": [139, 0, 0, 230],
+        "2. Ruim":       [231, 76, 60, 230],
+        "3. Media":      [241, 196, 15, 230],
+        "4. Boa":        [46, 204, 113, 230],
+        "5. Excelente":  [142, 68, 173, 230],
+        "Sem Info":      [128, 128, 128, 160],
+    }
+    df['base_color'] = df['condicao_da_lavoura'].apply(
+        lambda x: color_map.get(str(x).strip(), color_map["Sem Info"])
+    )
     df.insert(0, 'ID', range(1, len(df) + 1))
     return df
 
+@st.cache_resource(ttl=300)  # Remapeia a cada 5 minutos
+def get_image_index():
+    index = {}
+    if not FOTOS_DIR.exists():
+        return index
+    for path in FOTOS_DIR.glob("*"):
+        if path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
+            index[path.stem] = str(path)
+    return index
 
-def get_foto1_id(fotos_str):
-    """Extracts first photo ID"""
-    if pd.isna(fotos_str):
-        return None
-    return fotos_str.split(",")[0].strip()
-
-
-@st.cache_data
-def find_image_file(image_id):
-    """Search for image file in local folder"""
-    if not image_id:
-        return None
-
-    for ext in [".jpg", ".jpeg", ".png", ".JPG", ".JPEG", ".PNG"]:
-        path = FOTOS_DIR / f"{image_id}{ext}"
-        if path.exists():
-            return path
-    return None
-
-
-# Load data
 df = load_data()
+image_index = get_image_index()
 
-# 2. Sidebar filters
-st.sidebar.header("Filters")
-
-# Crop condition filter
+# --- 2. SIDEBAR ---
+st.sidebar.markdown("### Legenda - Condição")
+st.sidebar.markdown("""
+- 🔴 **1. Muito Ruim**\n- 🟠 **2. Ruim**\n- 🟡 **3. Media**\n- 🟢 **4. Boa**\n- 🟣 **5. Excelente**
+""")
+st.sidebar.header("Filtros de Safra")
 condition = st.sidebar.multiselect(
-    "Crop Condition:",
+    "Condição da Lavoura:",
     options=sorted(df["condicao_da_lavoura"].unique()),
     default=df["condicao_da_lavoura"].unique()
 )
-
-# Phenological stage filter
 stages = st.sidebar.multiselect(
-    "Phenological Stage:",
+    "Estádio Fenológico:",
     options=sorted(df["estadio_fenologico"].unique()),
     default=df["estadio_fenologico"].unique()
 )
 
-# Apply filters
 df_filtered = df[
     (df["condicao_da_lavoura"].isin(condition)) &
     (df["estadio_fenologico"].isin(stages))
-].copy()
+].copy().reset_index(drop=True)
 
-# Statistics
-st.sidebar.markdown("---")
-st.sidebar.markdown("Statistics")
-st.sidebar.metric("Total samples", len(df_filtered))
+st.sidebar.divider()
+st.sidebar.metric("Amostras Filtradas", len(df_filtered))
 
+# --- 3. SESSION STATE ---
+if "selected_idx" not in st.session_state:
+    st.session_state["selected_idx"] = None
 
-# 3. Map creation
-@st.cache_data
-def create_lightweight_map(df_data):
-    """Creates a lightweight map without embedded images"""
+# Guarda o tamanho atual do df_filtered na session para o callback acessar sem closure stale
+st.session_state["_df_len"] = len(df_filtered)
 
-    if len(df_data) == 0:
-        return None
+# Callback: roda ANTES do rerender — índice já correto quando o mapa é desenhado
+def on_map_select():
+    raw = st.session_state.get("pydeck_map")
+    if not raw:
+        st.session_state["selected_idx"] = None
+        return
 
-    center_lat = df_data['latitude'].mean()
-    center_lon = df_data['longitude'].mean()
+    indices = raw.get("selection", {}).get("indices", {})
+    all_idx = []
+    if isinstance(indices, dict):
+        for v in indices.values():
+            all_idx.extend(v)
+    elif isinstance(indices, list):
+        all_idx = indices
 
-    m = folium.Map(
-        location=[center_lat, center_lon],
-        zoom_start=6,
-        tiles="OpenStreetMap",
-        prefer_canvas=True
+    df_len = st.session_state.get("_df_len", 0)
+    if all_idx and 0 <= all_idx[0] < df_len:
+        st.session_state["selected_idx"] = all_idx[0]
+    else:
+        st.session_state["selected_idx"] = None
+
+# --- 4. MAPA ---
+# Callback já rodou neste rerun, selected_idx está atualizado
+selected_idx = st.session_state["selected_idx"]
+
+# Invalida seleção se o filtro mudou e o índice ficou fora do range
+if selected_idx is not None and selected_idx >= len(df_filtered):
+    selected_idx = None
+    st.session_state["selected_idx"] = None
+
+def build_display_data(data, sel_idx):
+    display = data.copy()
+    if sel_idx is not None and 0 <= sel_idx < len(display):
+        display['fill_color'] = display['base_color'].apply(lambda c: [c[0], c[1], c[2], 70])
+        display['point_radius'] = 15000
+        display.at[sel_idx, 'fill_color'] = [255, 255, 255, 255]
+        display.at[sel_idx, 'point_radius'] = 32000
+    else:
+        display['fill_color'] = display['base_color']
+        display['point_radius'] = 15000
+    return display
+
+def render_map(data, sel_idx):
+    display = build_display_data(data, sel_idx)
+
+    view_state = pdk.ViewState(
+        latitude=data['latitude'].mean() if not data.empty else -15.78,
+        longitude=data['longitude'].mean() if not data.empty else -47.93,
+        zoom=4, pitch=0,
     )
 
-    for _, row in df_data.iterrows():
-        popup_html = f"""
-        <div style='width: 240px; font-family: Arial, sans-serif; font-size: 13px;'>
-            <div style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white; padding: 12px; margin: -10px -10px 10px -10px;
-                        border-radius: 4px 4px 0 0;'>
-                <b style='font-size: 15px;'>Location: {row['localidade_']}</b>
-                <div style='margin-top: 4px; font-size: 11px; opacity: 0.9;'>
-                    ID: {row['ID']}
-                </div>
-            </div>
-            <table style='width: 100%; font-size: 13px; line-height: 2;'>
-                <tr>
-                    <td style='color: #666;'><b>Stage:</b></td>
-                    <td><b>{row['estadio_fenologico']}</b></td>
-                </tr>
-                <tr>
-                    <td style='color: #666;'><b>Yield:</b></td>
-                    <td><b style='color: #2ecc71; font-size: 14px;'>{row['graosha_k']:.2f}K</b> grains/ha</td>
-                </tr>
-                <tr>
-                    <td style='color: #666;'><b>Condition:</b></td>
-                    <td><b>{row['condicao_da_lavoura']}</b></td>
-                </tr>
-            </table>
-            <div style='margin-top: 10px; padding: 8px; background: #fff3cd;
-                        border-radius: 4px; text-align: center; border: 1px solid #ffc107;'>
-                <small style='color: #856404;'>
-                    Enter ID {row['ID']} below to view the photo
-                </small>
-            </div>
-        </div>
-        """
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        display,
+        get_position='[longitude, latitude]',
+        get_fill_color='fill_color',
+        get_radius='point_radius',
+        pickable=True,
+        auto_highlight=True,
+        highlight_color=[255, 255, 255, 60],
+        radius_min_pixels=6,
+    )
 
-        # Marker color by condition
-        color_map = {
-            "Bom": "green",
-            "Regular": "orange",
-            "Ruim": "red"
+    tooltip = {
+        "html": """
+            <div style="font-family:sans-serif;font-size:13px;line-height:1.7">
+                <b style="font-size:15px">📍 {localidade_}</b><br/>
+                <span style="opacity:.75">ID:</span> <b>{ID}</b><br/>
+                <span style="opacity:.75">Condição:</span> <b>{condicao_da_lavoura}</b><br/>
+                <span style="opacity:.75">Estádio:</span> <b>{estadio_fenologico}</b><br/>
+                <span style="opacity:.75">Produtividade:</span> <b>{graosha_k} K grãos/ha</b>
+            </div>
+        """,
+        "style": {
+            "backgroundColor": "#1a1a2e",
+            "color": "white",
+            "border": "1px solid #4a4a8a",
+            "borderRadius": "8px",
+            "padding": "10px",
         }
+    }
 
-        condition_str = str(row['condicao_da_lavoura'])
-        color = "blue"
-        for key, value in color_map.items():
-            if key in condition_str:
-                color = value
-                break
+    return pdk.Deck(layers=[layer], initial_view_state=view_state, map_style=None, tooltip=tooltip)
 
-        folium.Marker(
-            location=[row['latitude'], row['longitude']],
-            popup=folium.Popup(popup_html, max_width=280),
-            tooltip=f"ID {row['ID']}: {row['localidade_']} | {row['graosha_k']:.1f}K",
-            icon=folium.Icon(color=color, icon="leaf", prefix='fa')
-        ).add_to(m)
+st.subheader("Visualização Espacial")
+st.caption("Passe o mouse para ver detalhes • Clique para fixar a amostra")
 
-    return m
+st.pydeck_chart(
+    render_map(df_filtered, selected_idx),
+    on_select=on_map_select,   # callback garante que selected_idx é atualizado antes do próximo render
+    selection_mode="single-object",
+    width='stretch',
+    key="pydeck_map",
+)
 
+# --- 5. DOWNLOAD ---
+st.divider()
+csv = df_filtered.to_csv(index=False).encode('utf-8')
+st.download_button("⬇️ Baixar Dados Filtrados (CSV)", csv, "crop_tour.csv", "text/csv")
 
-# Prepare data for map cache
-df_for_map = df_filtered[['ID', 'latitude', 'longitude', 'localidade_',
-                          'estadio_fenologico', 'graosha_k',
-                          'condicao_da_lavoura']].copy()
+# --- 6. DETALHES ---
+st.divider()
+st.markdown('<div id="detail-anchor"></div>', unsafe_allow_html=True)
 
-# Generate map
-with st.spinner("Generating map..."):
-    m = create_lightweight_map(df_for_map)
+selected_row = None
+if selected_idx is not None and 0 <= selected_idx < len(df_filtered):
+    selected_row = df_filtered.iloc[selected_idx]
 
-# 4. Display map
-if m:
-    st_folium(m, width="100%", height=600)
-else:
-    st.warning("No points match the selected filters.")
+if selected_row is not None:
+    st.markdown("""
+        <script>
+            document.getElementById('detail-anchor')?.scrollIntoView({behavior:'smooth', block:'start'});
+        </script>
+    """, unsafe_allow_html=True)
 
-# 5. ID search section
-st.markdown("---")
-st.subheader("Search Point by ID")
+    badge_colors = {
+        "1. Muito Ruim": "#8B0000",
+        "2. Ruim":       "#E74C3C",
+        "3. Media":      "#F1C40F",
+        "4. Boa":        "#2ECC71",
+        "5. Excelente":  "#8E44AD",
+    }
+    cond = selected_row['condicao_da_lavoura']
+    color = badge_colors.get(cond, "#888")
 
-col1, col2 = st.columns([2, 1])
+    with st.spinner("Carregando detalhes..."):
+        st.markdown('<div class="detail-card">', unsafe_allow_html=True)
+        c1, c2 = st.columns([1, 1])
 
-with col1:
-    st.markdown("Enter the ID of the point you want to view:")
-
-with col2:
-    if len(df_filtered) > 0:
-        csv = df_filtered.to_csv(index=False).encode('utf-8')
-        st.download_button(
-            label="Download CSV",
-            data=csv,
-            file_name=f'crop_tour_{pd.Timestamp.now().strftime("%Y%m%d_%H%M%S")}.csv',
-            mime='text/csv',
-        )
-
-if len(df_filtered) > 0:
-    col_input, col_info = st.columns([1, 3])
-
-    with col_input:
-        id_range = f"({df_filtered['ID'].min()} - {df_filtered['ID'].max()})"
-        input_id = st.number_input(
-            f"ID {id_range}:",
-            min_value=int(df_filtered['ID'].min()),
-            max_value=int(df_filtered['ID'].max()),
-            value=int(df_filtered['ID'].min()),
-            step=1,
-            key="id_input"
-        )
-
-    with col_info:
-        if input_id in df_filtered['ID'].values:
-            selected_row = df_filtered[df_filtered['ID'] == input_id].iloc[0]
-            st.success(f"ID {input_id} found: {selected_row['localidade_']}")
-        else:
-            st.error(f"ID {input_id} not found in filtered data")
-            selected_row = None
-
-    if input_id in df_filtered['ID'].values:
-        st.markdown("---")
-
-        col_info, col_foto = st.columns([1, 1])
-
-        with col_info:
-            st.markdown(f"Information - ID {selected_row['ID']}")
-
+        with c1:
             st.markdown(f"""
-            Location: {selected_row['localidade_']}
+                <div style="background:{color}22;border-left:4px solid {color};
+                            border-radius:6px;padding:12px 16px;margin-bottom:12px;">
+                    <span style="font-size:18px;font-weight:700">📍 Amostra ID {int(selected_row['ID'])}</span><br/>
+                    <span style="font-size:13px;opacity:.8">{selected_row['localidade_']}</span>
+                </div>
+            """, unsafe_allow_html=True)
+            st.markdown(f"**Condição:** `{cond}`")
+            st.markdown(f"**Estádio Fenológico:** `{selected_row['estadio_fenologico']}`")
+            st.markdown(f"**Produtividade:** `{selected_row['graosha_k']:.2f}K grãos/ha`")
 
-            Phenological Stage: {selected_row['estadio_fenologico']}
-
-            Yield: {selected_row['graosha_k']:.2f}K grains/ha
-
-            Crop Condition: {selected_row['condicao_da_lavoura']}
-
-            Coordinates:
-            - Latitude: {selected_row['latitude']:.6f}
-            - Longitude: {selected_row['longitude']:.6f}
-            """)
-
-            if 'data_coleta' in selected_row:
-                st.markdown(f"Collection Date: {selected_row['data_coleta']}")
-
-        with col_foto:
-            st.markdown("Sample Photo")
-
-            foto1_id = get_foto1_id(selected_row["fotos"])
-            if foto1_id:
-                foto_path = find_image_file(foto1_id)
-                if foto_path and foto_path.exists():
-                    st.image(
-                        str(foto_path),
-                        caption=f"Photo ID: {foto1_id}",
-                        width='stretch'
-                    )
+        with c2:
+            # Pega TODAS as fotos (separadas por vírgula)
+            foto_ids = [id.strip() for id in str(selected_row["fotos"]).split(",")]
+            foto_paths = [image_index.get(id) for id in foto_ids]
+            fotos_validas = [(id, path) for id, path in zip(foto_ids, foto_paths) if path]
+            
+            if fotos_validas:
+                # Se tem múltiplas fotos, cria abas
+                if len(fotos_validas) > 1:
+                    tabs = st.tabs([f"Foto {i+1}" for i in range(len(fotos_validas))])
+                    for tab, (foto_id, foto_path) in zip(tabs, fotos_validas):
+                        with tab:
+                            st.image(foto_path, caption=f"Foto {foto_id}", width='stretch')
                 else:
-                    st.info(f"Photo not found: {foto1_id}")
+                    # Se tem só 1 foto, mostra direto
+                    st.image(fotos_validas[0][1], caption=f"Foto da Amostra {int(selected_row['ID'])}", width='stretch')
             else:
-                st.info("No photo available for this sample")
+                st.markdown("""
+                    <div style="background:#1e1e1e;border-radius:8px;height:200px;
+                                display:flex;align-items:center;justify-content:center;
+                                color:#666;font-size:14px;">
+                        📷 Foto não disponível
+                    </div>
+                """, unsafe_allow_html=True)
 
-    st.markdown("---")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    with st.expander("View full filtered data table"):
-        st.dataframe(
-            df_filtered[['ID', 'localidade_', 'estadio_fenologico',
-                         'graosha_k', 'condicao_da_lavoura',
-                         'latitude', 'longitude']],
-            width='stretch',
-            height=400
-        )
 else:
-    st.info("No data available with the current filters.")
+    st.markdown("""
+        <div style="text-align:center;padding:32px;background:#0e1117;
+                    border-radius:10px;border:1px dashed #333;color:#666;">
+            🗺️ <b>Clique em um ponto no mapa</b> para ver os detalhes da amostra
+        </div>
+    """, unsafe_allow_html=True)
 
-# Footer
-st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: #666; font-size: 12px;'>
-    <p>Tip: Click on a map marker to see the point ID.</p>
-    <p>Enter the ID above to view details and the sample photo.</p>
-</div>
-""", unsafe_allow_html=True)
+# --- 7. TABELA ---
+with st.expander("Visualizar Tabela de Dados Completa"):
+    st.dataframe(df_filtered, width='stretch')
