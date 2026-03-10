@@ -27,9 +27,15 @@ def load_data():
     df = pd.read_csv("crop_tour_soja.csv")
     df.columns = df.columns.str.strip()
     df = df.rename(columns={'_latitude': 'latitude', '_longitude': 'longitude', 'localidade': 'localidade_'})
+    
+    # Remove apenas quem não tem coordenada (essencial para o PyDeck)
     df = df.dropna(subset=['latitude', 'longitude'])
 
-    valores_validos = ["1. Muito Ruim", "2. Ruim", "3. Media", "4. Boa", "5. Excelente"]
+    # TRATAMENTO DA CONDIÇÃO
+    # 1. Garante que é string e remove espaços extras
+    df['condicao_da_lavoura'] = df['condicao_da_lavoura'].astype(str).str.strip()
+    # 2. Substitui valores nulos ou vazios por "Sem Info"
+    df['condicao_da_lavoura'] = df['condicao_da_lavoura'].replace(['nan', 'None', ''], 'Sem Info')
     df['condicao_da_lavoura'] = df['condicao_da_lavoura'].fillna("Sem Info")
 
     color_map = {
@@ -40,9 +46,12 @@ def load_data():
         "5. Excelente":  [142, 68, 173, 230],
         "Sem Info":      [128, 128, 128, 160],
     }
+    
+    # O .get() garante que se vier um valor bizarro, ele vira cinza em vez de dar erro
     df['base_color'] = df['condicao_da_lavoura'].apply(
-        lambda x: color_map.get(str(x).strip(), color_map["Sem Info"])
+        lambda x: color_map.get(x, color_map["Sem Info"])
     )
+    
     df.insert(0, 'ID', range(1, len(df) + 1))
     return df
 
