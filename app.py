@@ -30,7 +30,7 @@ def load_data():
     df = df.dropna(subset=['latitude', 'longitude'])
 
     valores_validos = ["1. Muito Ruim", "2. Ruim", "3. Media", "4. Boa", "5. Excelente"]
-    df = df[df['condicao_da_lavoura'].isin(valores_validos)]
+    df['condicao_da_lavoura'] = df['condicao_da_lavoura'].fillna("Sem Info")
 
     color_map = {
         "1. Muito Ruim": [139, 0, 0, 230],
@@ -62,7 +62,7 @@ image_index = get_image_index()
 # --- 2. SIDEBAR ---
 st.sidebar.markdown("### Legenda - Condição")
 st.sidebar.markdown("""
-- 🔴 **1. Muito Ruim**\n- 🟠 **2. Ruim**\n- 🟡 **3. Media**\n- 🟢 **4. Boa**\n- 🟣 **5. Excelente**
+- 🔴 **1. Muito Ruim**\n- 🟠 **2. Ruim**\n- 🟡 **3. Media**\n- 🟢 **4. Boa**\n- 🟣 **5. Excelente** \n- ⚪ **Sem Informação**
 """)
 st.sidebar.header("Filtros de Safra")
 condition = st.sidebar.multiselect(
@@ -212,6 +212,7 @@ if selected_row is not None:
         "3. Media":      "#F1C40F",
         "4. Boa":        "#2ECC71",
         "5. Excelente":  "#8E44AD",
+        "Sem Info":      "#808080", 
     }
     cond = selected_row['condicao_da_lavoura']
     color = badge_colors.get(cond, "#888")
