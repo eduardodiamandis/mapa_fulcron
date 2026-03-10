@@ -3,8 +3,8 @@ import pandas as pd
 import pydeck as pdk
 from pathlib import Path
 
-# --- CONFIGURAÇÃO DA PÁGINA ---
-st.set_page_config(layout="wide", page_title="Crop Tour Soja - Brazil 2026")
+# --- PAGE CONFIGURATION ---
+st.set_page_config(layout="wide", page_title="Soybean Crop Tour - Brazil 2026")
 
 st.markdown("""
 <style>
@@ -22,17 +22,15 @@ st.title("Sampling Map: Brazil Soy Crop Tour 2026")
 FOTOS_DIR = Path("fotos")
 
 
-# --- 1. DADOS ---
+# --- 1. DATA LOADING ---
 @st.cache_data
 def load_data():
     df = pd.read_csv("crop_tour_soja.csv")
     df.columns = df.columns.str.strip()
     df = df.rename(columns={'_latitude': 'latitude', '_longitude': 'longitude', 'localidade': 'localidade_'})
-
-    # Mantém apenas quem tem coordenadas
     df = df.dropna(subset=['latitude', 'longitude'])
 
-    # --- TRATAMENTO PARA ESPAÇOS E "SEM INFORMAÇÃO" ---
+    # Normalização de strings (Regex para espaços duplos/invisíveis)
     df['condicao_da_lavoura'] = (
         df['condicao_da_lavoura']
         .fillna("Sem Info")
@@ -71,8 +69,7 @@ def load_data():
 @st.cache_resource(ttl=300)
 def get_image_index():
     index = {}
-    if not FOTOS_DIR.exists():
-        return index
+    if not FOTOS_DIR.exists(): return index
     for path in FOTOS_DIR.glob("*"):
         if path.suffix.lower() in [".jpg", ".jpeg", ".png"]:
             index[path.stem] = str(path)
@@ -82,12 +79,12 @@ def get_image_index():
 df = load_data()
 image_index = get_image_index()
 
-# --- 2. SIDEBAR (LEGENDA COM TRADUÇÕES) ---
+# --- 2. SIDEBAR (LEGEND & FILTERS) ---
 st.sidebar.markdown("### Legend - Condition")
 st.sidebar.markdown("""
 - 🔴 **1. Muito Ruim** (Very Poor)
 - 🟠 **2. Ruim** (Poor)
-- 🟡 **3. Media** (Fair)
+- 🟡 **3. Media** (Average)
 - 🟢 **4. Boa** (Good)
 - 🟣 **5. Excelente** (Excellent)
 - ⚪ **Sem Info** (No Information)
@@ -95,18 +92,16 @@ st.sidebar.markdown("""
 
 st.sidebar.header("Crop Filters")
 
-opcoes_condicao = sorted(df["condicao_da_lavoura"].unique())
 condition = st.sidebar.multiselect(
-    "Condição da Lavoura (Condition):",
-    options=opcoes_condicao,
-    default=opcoes_condicao
+    "Condition:",
+    options=sorted(df["condicao_da_lavoura"].unique()),
+    default=df["condicao_da_lavoura"].unique()
 )
 
-opcoes_estadios = sorted(df["estadio_fenologico"].unique())
 stages = st.sidebar.multiselect(
-    "Estádio Fenológico (Growth Stage):",
-    options=opcoes_estadios,
-    default=opcoes_estadios
+    "Growth Stage:",
+    options=sorted(df["estadio_fenologico"].unique()),
+    default=df["estadio_fenologico"].unique()
 )
 
 df_filtered = df[
@@ -120,15 +115,12 @@ st.sidebar.metric("Filtered Samples", len(df_filtered))
 # --- 3. SESSION STATE ---
 if "selected_idx" not in st.session_state:
     st.session_state["selected_idx"] = None
-
 st.session_state["_df_len"] = len(df_filtered)
 
 
 def on_map_select():
     raw = st.session_state.get("pydeck_map")
-    if not raw:
-        st.session_state["selected_idx"] = None
-        return
+    if not raw: return
     indices = raw.get("selection", {}).get("indices", {})
     all_idx = []
     if isinstance(indices, dict):
@@ -136,108 +128,108 @@ def on_map_select():
     elif isinstance(indices, list):
         all_idx = indices
 
-    df_len = st.session_state.get("_df_len", 0)
-    if all_idx and 0 <= all_idx[0] < df_len:
+    if all_idx and 0 <= all_idx[0] < st.session_state["_df_len"]:
         st.session_state["selected_idx"] = all_idx[0]
     else:
         st.session_state["selected_idx"] = None
 
 
-# --- 4. MAPA ---
+# --- 4. MAP ---
 selected_idx = st.session_state["selected_idx"]
 if selected_idx is not None and selected_idx >= len(df_filtered):
     selected_idx = None
-    st.session_state["selected_idx"] = None
-
-
-def build_display_data(data, sel_idx):
-    display = data.copy()
-    if sel_idx is not None and 0 <= sel_idx < len(display):
-        display['fill_color'] = display['base_color'].apply(lambda c: [c[0], c[1], c[2], 70])
-        display['point_radius'] = 15000
-        display.at[sel_idx, 'fill_color'] = [255, 255, 255, 255]
-        display.at[sel_idx, 'point_radius'] = 32000
-    else:
-        display['fill_color'] = display['base_color']
-        display['point_radius'] = 15000
-    return display
 
 
 def render_map(data, sel_idx):
-    display = build_display_data(data, sel_idx)
+    display = data.copy()
+    display['fill_color'] = display['base_color']
+    display['point_radius'] = 15000
+    if sel_idx is not None and 0 <= sel_idx < len(display):
+        display['fill_color'] = display['base_color'].apply(lambda c: [c[0], c[1], c[2], 70])
+        display.at[sel_idx, 'fill_color'] = [255, 255, 255, 255]
+        display.at[sel_idx, 'point_radius'] = 32000
+
     view_state = pdk.ViewState(
         latitude=data['latitude'].mean() if not data.empty else -15.78,
         longitude=data['longitude'].mean() if not data.empty else -47.93,
         zoom=4, pitch=0,
     )
+
     layer = pdk.Layer(
-        "ScatterplotLayer",
-        display,
+        "ScatterplotLayer", display,
         get_position='[longitude, latitude]',
         get_fill_color='fill_color',
         get_radius='point_radius',
-        pickable=True,
-        auto_highlight=True,
-        radius_min_pixels=6,
+        pickable=True, auto_highlight=True, radius_min_pixels=6,
     )
+
     return pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={
         "html": "<b>Location:</b> {localidade_}<br/><b>Condition:</b> {condicao_da_lavoura}<br/><b>Yield:</b> {graosha_k} K grains/ha",
-        "style": {"backgroundColor": "#1a1a2e", "color": "white"}
+        "style": {"backgroundColor": "#1a1a2e", "color": "white", "borderRadius": "8px"}
     })
 
 
 st.subheader("Spatial Visualization")
-st.caption("Hover for details • Click on a point to view field data below")
+st.pydeck_chart(render_map(df_filtered, selected_idx), on_select=on_map_select, selection_mode="single-object",
+                key="pydeck_map")
 
-st.pydeck_chart(
-    render_map(df_filtered, selected_idx),
-    on_select=on_map_select,
-    selection_mode="single-object",
-    width='stretch',
-    key="pydeck_map",
-)
-
-# --- 5. DETALHES ---
+# --- 5. DETAILS (FORMATTING RESTORED) ---
 st.divider()
-selected_row = df_filtered.iloc[selected_idx] if (
-            selected_idx is not None and selected_idx < len(df_filtered)) else None
+if selected_idx is not None and selected_idx < len(df_filtered):
+    selected_row = df_filtered.iloc[selected_idx]
 
-if selected_row is not None:
     badge_colors = {
         "1. Muito Ruim": "#8B0000", "2. Ruim": "#E74C3C", "3. Media": "#F1C40F",
         "4. Boa": "#2ECC71", "5. Excelente": "#8E44AD", "Sem Info": "#808080"
     }
-    cond = selected_row['condicao_da_lavoura']
-    color = badge_colors.get(cond, "#888")
+    color = badge_colors.get(selected_row['condicao_da_lavoura'], "#888")
 
     st.markdown('<div class="detail-card">', unsafe_allow_html=True)
     c1, c2 = st.columns([1, 1])
+
     with c1:
         st.markdown(f"""
-            <div style="background:{color}22;border-left:4px solid {color};padding:12px;border-radius:6px;">
-                <span style="font-weight:700">📍 Sample ID {int(selected_row['ID'])}</span><br/>
-                <span style="font-size:14px;">{selected_row['localidade_']}</span>
+            <div style="background:{color}22;border-left:4px solid {color};padding:12px;border-radius:6px;margin-bottom:15px;">
+                <span style="font-weight:700;font-size:18px;">📍 Sample ID {int(selected_row['ID'])}</span><br/>
+                <span style="font-size:14px;opacity:0.8;">{selected_row['localidade_']}</span>
             </div>
         """, unsafe_allow_html=True)
-        st.write(f"**Condition (Condição):** {cond}")
-        st.write(f"**Stage (Estádio):** {selected_row['estadio_fenologico']}")
-        st.write(f"**Yield (Produtividade):** {selected_row.get('graosha_k', 0):.2f}K grains/ha")
+
+        # O Visual formatado que você gosta (com backticks):
+        st.markdown(f"**Condition:** `{selected_row['condicao_da_lavoura']}`")
+        st.markdown(f"**Growth Stage:** `{selected_row['estadio_fenologico']}`")
+        st.markdown(f"**Estimated Yield:** `{selected_row.get('graosha_k', 0):.2f} K grains/ha`")
+
+        obs_raw = selected_row.get("observacoes", "")
+        obs = "No observations available." if pd.isna(obs_raw) or str(obs_raw).strip() in ["", "nan"] else str(
+            obs_raw).strip()
+        st.markdown(f"""
+            <div style="margin-top:20px; padding:10px; background:#1a1a2e; border-radius:5px; border-left: 3px solid #4a4a8a;">
+                <small style="color:#888; text-transform:uppercase;">Notes</small><br/>
+                <span style="font-size:14px; color:#ddd;">{obs}</span>
+            </div>
+        """, unsafe_allow_html=True)
 
     with c2:
         foto_ids = [id.strip() for id in str(selected_row.get("fotos", "")).split(",") if id.strip() not in ["nan", ""]]
         foto_paths = [image_index.get(id) for id in foto_ids]
-        valid_fotos = [p for p in foto_paths if p]
+        valid_fotos = [(id, path) for id, path in zip(foto_ids, foto_paths) if path]
+
         if valid_fotos:
-            st.image(valid_fotos[0], use_container_width=True,
-                     caption=f"Field Image - Sample {int(selected_row['ID'])}")
+            if len(valid_fotos) > 1:
+                tabs = st.tabs([f"Photo {i + 1}" for i in range(len(valid_fotos))])
+                for tab, (f_id, f_path) in zip(tabs, valid_fotos):
+                    with tab: st.image(f_path, width='stretch', caption=f"Photo ID: {f_id}")
+            else:
+                st.image(valid_fotos[0][1], width='stretch', caption=f"Sample Photo")
         else:
-            st.info("📷 No photo available.")
+            st.info("📷 No photos found for this sample.")
     st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.info("🗺️ Select a point on the map to see specific details.")
+    st.info("🗺️ Select a point on the map to view detailed field information and photos.")
 
-# --- 6. DOWNLOAD & TABLE ---
+# --- 6. FOOTER ---
 st.divider()
 st.download_button("⬇️ Download CSV", df_filtered.to_csv(index=False).encode('utf-8'), "crop_tour.csv", "text/csv")
 with st.expander("View Full Data Table"):
-    st.dataframe(df_filtered, use_container_width=True)
+    st.dataframe(df_filtered, width='stretch')
