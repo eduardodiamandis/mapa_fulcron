@@ -228,8 +228,3 @@ if selected_idx is not None and selected_idx < len(df_filtered):
 else:
     st.info("🗺️ Select a point on the map to view detailed field information and photos.")
 
-# --- 6. FOOTER ---
-st.divider()
-st.download_button("⬇️ Download CSV", df_filtered.to_csv(index=False).encode('utf-8'), "crop_tour.csv", "text/csv")
-with st.expander("View Full Data Table"):
-    st.dataframe(df_filtered, width='stretch')
