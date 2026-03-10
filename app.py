@@ -87,7 +87,7 @@ st.sidebar.markdown("### Legend - Condition")
 st.sidebar.markdown("""
 - 🔴 **1. Muito Ruim** (Very Poor)
 - 🟠 **2. Ruim** (Poor)
-- 🟡 **3. Media** (Average)
+- 🟡 **3. Media** (Fair)
 - 🟢 **4. Boa** (Good)
 - 🟣 **5. Excelente** (Excellent)
 - ⚪ **Sem Info** (No Information)
