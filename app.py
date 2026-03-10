@@ -228,7 +228,7 @@ if selected_row is not None:
         foto_paths = [image_index.get(id) for id in foto_ids]
         valid_fotos = [p for p in foto_paths if p]
         if valid_fotos:
-            st.image(valid_fotos[0], use_container_width=True,
+            st.image(valid_fotos[0], width='stretch',
                      caption=f"Field Image - Sample {int(selected_row['ID'])}")
         else:
             st.info("📷 No photo available.")
@@ -240,4 +240,4 @@ else:
 st.divider()
 st.download_button("⬇️ Download CSV", df_filtered.to_csv(index=False).encode('utf-8'), "crop_tour.csv", "text/csv")
 with st.expander("View Full Data Table"):
-    st.dataframe(df_filtered, use_container_width=True)
+    st.dataframe(df_filtered, width='stretch')
