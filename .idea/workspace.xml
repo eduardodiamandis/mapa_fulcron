@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="" />
+    <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crop_tour_soja.csv" beforeDir="false" afterPath="$PROJECT_DIR$/crop_tour_soja.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crop_tour_soja.xlsx" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
