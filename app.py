@@ -31,15 +31,12 @@ def load_data(csv_file):
     df = df.rename(columns={'_latitude': 'latitude', '_longitude': 'longitude', 'localidade': 'localidade_'})
     df = df.dropna(subset=['latitude', 'longitude'])
 
-    # Handle different column names for different crops
     if 'estdio_fenolgico' in df.columns and 'estadio_fenologico' not in df.columns:
         df = df.rename(columns={'estdio_fenolgico': 'estadio_fenologico'})
-    if 'condio_da_lavoura' in df.columns:
-        pass  # Already correct
-    if 'espaamento_cm' in df.columns and 'espacamento_de_linha_cm' not in df.columns:
-        pass  # Safrinha uses espaamento_cm
 
-    # Normalização de strings (Regex para espaços duplos/invisíveis)
+    if 'condio_da_lavoura' in df.columns and 'condicao_da_lavoura' not in df.columns:
+        df = df.rename(columns={'condio_da_lavoura': 'condicao_da_lavoura'})
+
     if not df.empty and 'condicao_da_lavoura' in df.columns:
         df['condicao_da_lavoura'] = (
             df['condicao_da_lavoura']
@@ -60,20 +57,25 @@ def load_data(csv_file):
             .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
         )
 
+    # ✅ Cores como colunas inteiras separadas — Arrow-safe, sem risco de corrupção
+    color_map = {
+        "2. Ruim / Poor":           [231, 76,  60,  230],
+        "3. Média / Fair":          [241, 196, 15,  230],
+        "4. Boa / Good":            [46,  204, 113, 230],
+        "5. Excelente / Excellent": [142, 68,  173, 230],
+        "Sem Info":                 [128, 128, 128, 160],
+    }
+
+    def get_color(val, i):
+        return color_map.get(val, color_map["Sem Info"])[i]
+
     if not df.empty and 'condicao_da_lavoura' in df.columns:
-        color_map = {
-            "1. Muito Ruim": [139, 0, 0, 230],
-            "2. Ruim": [231, 76, 60, 230],
-            "3. Media": [241, 196, 15, 230],
-            "4. Boa": [46, 204, 113, 230],
-            "5. Excelente": [142, 68, 173, 230],
-            "Sem Info": [128, 128, 128, 160],
-        }
-        df['base_color'] = df['condicao_da_lavoura'].apply(
-            lambda x: color_map.get(x, color_map["Sem Info"])
-        )
+        df['cr'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 0))
+        df['cg'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 1))
+        df['cb'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 2))
+        df['ca'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 3))
     else:
-        df['base_color'] = [[128, 128, 128, 160]] * len(df)
+        df['cr'], df['cg'], df['cb'], df['ca'] = 128, 128, 128, 160
 
     df.insert(0, 'ID', range(1, len(df) + 1))
     return df
@@ -95,11 +97,10 @@ image_index = get_image_index()
 # --- 2. SIDEBAR (LEGEND & FILTERS) ---
 st.sidebar.markdown("### Legend - Condition")
 st.sidebar.markdown("""
-- 🔴 **1. Muito Ruim** (Very Poor)
-- 🟠 **2. Ruim** (Poor)
-- 🟡 **3. Media** (Average)
-- 🟢 **4. Boa** (Good)
-- 🟣 **5. Excelente** (Excellent)
+- 🔴 **2. Ruim / Poor**
+- 🟡 **3. Média / Fair**
+- 🟢 **4. Boa / Good**
+- 🟣 **5. Excelente / Excellent**
 - ⚪ **Sem Info** (No Information)
 """)
 
@@ -122,7 +123,7 @@ if not df.empty:
         df_filtered = df[
             (df["condicao_da_lavoura"].isin(condition)) &
             (df["estadio_fenologico"].isin(stages))
-            ].copy().reset_index(drop=True)
+        ].copy().reset_index(drop=True)
     else:
         df_filtered = df.copy().reset_index(drop=True)
 else:
@@ -165,11 +166,20 @@ def render_map(data, sel_idx):
         return pdk.Deck(initial_view_state=view_state)
 
     display = data.copy()
-    display['fill_color'] = display['base_color']
     display['point_radius'] = 15000
+
+    # ✅ Colunas r/g/b/a já são inteiros puros — sem risco de corrupção Arrow
+    display['r'] = display['cr']
+    display['g'] = display['cg']
+    display['b'] = display['cb']
+    display['a'] = display['ca']
+
     if sel_idx is not None and 0 <= sel_idx < len(display):
-        display['fill_color'] = display['base_color'].apply(lambda c: [c[0], c[1], c[2], 70])
-        display.at[sel_idx, 'fill_color'] = [255, 255, 255, 255]
+        display['a'] = 70  # desfoca todos
+        display.at[sel_idx, 'r'] = 255
+        display.at[sel_idx, 'g'] = 255
+        display.at[sel_idx, 'b'] = 255
+        display.at[sel_idx, 'a'] = 255
         display.at[sel_idx, 'point_radius'] = 32000
 
     view_state = pdk.ViewState(
@@ -181,7 +191,7 @@ def render_map(data, sel_idx):
     layer = pdk.Layer(
         "ScatterplotLayer", display,
         get_position='[longitude, latitude]',
-        get_fill_color='fill_color',
+        get_fill_color='[r, g, b, a]',  # ✅ Leitura direta de colunas inteiras
         get_radius='point_radius',
         pickable=True, auto_highlight=True, radius_min_pixels=6,
     )
@@ -200,14 +210,17 @@ st.subheader("Spatial Visualization")
 st.pydeck_chart(render_map(df_filtered, selected_idx), on_select=on_map_select, selection_mode="single-object",
                 key="pydeck_map")
 
-# --- 5. DETAILS (FORMATTING RESTORED) ---
+# --- 5. DETAILS ---
 st.divider()
 if selected_idx is not None and selected_idx < len(df_filtered):
     selected_row = df_filtered.iloc[selected_idx]
 
     badge_colors = {
-        "1. Muito Ruim": "#8B0000", "2. Ruim": "#E74C3C", "3. Media": "#F1C40F",
-        "4. Boa": "#2ECC71", "5. Excelente": "#8E44AD", "Sem Info": "#808080"
+        "2. Ruim / Poor":           "#E74C3C",
+        "3. Média / Fair":          "#F1C40F",
+        "4. Boa / Good":            "#2ECC71",
+        "5. Excelente / Excellent": "#8E44AD",
+        "Sem Info":                 "#808080",
     }
     condition_val = selected_row.get('condicao_da_lavoura', 'Sem Info')
     color = badge_colors.get(condition_val, "#888")
@@ -249,15 +262,12 @@ if selected_idx is not None and selected_idx < len(df_filtered):
         """, unsafe_allow_html=True)
 
     with c2:
-        # Collect photos from different columns depending on crop
         all_foto_ids = []
 
-        # For soja
         if "fotos" in selected_row.index:
             fotos_raw = str(selected_row.get("fotos", ""))
             all_foto_ids.extend([id.strip() for id in fotos_raw.split(",") if id.strip() not in ["nan", ""]])
 
-        # For safrinha
         for col in ["fotos_das_espigas_cap_do_carro", "foto_das_linhas", "fotos_adicionais"]:
             if col in selected_row.index:
                 fotos_raw = str(selected_row.get(col, ""))
