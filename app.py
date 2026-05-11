@@ -20,7 +20,7 @@ st.markdown("""
 st.title("Sampling Map: Safrinha Crop Tour 2026")
 
 FOTOS_DIR = Path("fotos")
-CSV_FILE = "crop_tour_safrinha.csv"
+CSV_FILE = "brazil_2026_winter_corn_croptour.csv"
 
 
 # --- 1. DATA LOADING ---
