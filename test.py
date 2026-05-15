@@ -4,7 +4,7 @@ import pydeck as pdk
 from pathlib import Path
 
 # --- PAGE CONFIGURATION ---
-st.set_page_config(layout="wide", page_title="Soybean Crop Tour - Brazil 2026")
+st.set_page_config(layout="wide", page_title="Crop Tour - Brazil 2026")
 
 st.markdown("""
 <style>
@@ -17,50 +17,86 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Sampling Map: Brazil Soy Crop Tour 2026")
+st.title("Sampling Map: Safrinha Crop Tour 2026")
 
 FOTOS_DIR = Path("fotos")
+CSV_FILE = "brazil_2026_winter_corn_croptour.csv"
 
 
 # --- 1. DATA LOADING ---
 @st.cache_data
-def load_data():
-    df = pd.read_csv("crop_tour_soja.csv")
+def load_data(csv_file):
+    df = pd.read_csv(csv_file)
     df.columns = df.columns.str.strip()
     df = df.rename(columns={'_latitude': 'latitude', '_longitude': 'longitude', 'localidade': 'localidade_'})
     df = df.dropna(subset=['latitude', 'longitude'])
 
-    # Normalização de strings (Regex para espaços duplos/invisíveis)
-    df['condicao_da_lavoura'] = (
-        df['condicao_da_lavoura']
-        .fillna("Sem Info")
-        .astype(str)
-        .str.replace(r'\s+', ' ', regex=True)
-        .str.strip()
-        .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
-    )
+    if 'estdio_fenolgico' in df.columns and 'estadio_fenologico' not in df.columns:
+        df = df.rename(columns={'estdio_fenolgico': 'estadio_fenologico'})
 
-    df['estadio_fenologico'] = (
-        df['estadio_fenologico']
-        .fillna("Sem Info")
-        .astype(str)
-        .str.replace(r'\s+', ' ', regex=True)
-        .str.strip()
-        .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
-    )
+    if 'condio_da_lavoura' in df.columns and 'condicao_da_lavoura' not in df.columns:
+        df = df.rename(columns={'condio_da_lavoura': 'condicao_da_lavoura'})
 
+    if not df.empty and 'condicao_da_lavoura' in df.columns:
+        df['condicao_da_lavoura'] = (
+            df['condicao_da_lavoura']
+            .fillna("Sem Info")
+            .astype(str)
+            .str.replace(r'\s+', ' ', regex=True)
+            .str.strip()
+            .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
+        )
+
+    if not df.empty and 'estadio_fenologico' in df.columns:
+        df['estadio_fenologico'] = (
+            df['estadio_fenologico']
+            .fillna("Sem Info")
+            .astype(str)
+            .str.replace(r'\s+', ' ', regex=True)
+            .str.strip()
+            .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
+        )
+
+    # ✅ AJUSTE DE PRODUTIVIDADE
+    # Fórmula: y = ((0,04668x + 0,16508) * 1000) / 60
+    # Aplica a transformação linear com conversão de unidades a todos os valores de produtividade
+    if 'produtividade_estimada_clculo_automtico_sacasha' in df.columns:
+        # Converte para numérico (valores inválidos viram NaN)
+        df['produtividade_estimada_clculo_automtico_sacasha'] = pd.to_numeric(
+            df['produtividade_estimada_clculo_automtico_sacasha'],
+            errors='coerce'
+        )
+
+        # ✅ Armazena o valor ORIGINAL em uma coluna separada para verificação
+        # Isso permite que você valide o cálculo: y = ((0,04668x + 0,16508) * 1000) / 60
+        df['produtividade_original_sacasha'] = df['produtividade_estimada_clculo_automtico_sacasha'].copy()
+
+        # Substitui os valores originais pelos ajustados conforme a fórmula correta
+        # com conversão de unidades (multiplicar por 1000 e dividir por 60)
+        df['produtividade_estimada_clculo_automtico_sacasha'] = (
+                                                                        ((0.04668 * df[
+                                                                            'produtividade_estimada_clculo_automtico_sacasha']) + 0.16508) * 1000
+                                                                ) / 60
+
+    # ✅ Cores como colunas inteiras separadas — Arrow-safe, sem risco de corrupção
     color_map = {
-        "1. Muito Ruim": [139, 0, 0, 230],
-        "2. Ruim": [231, 76, 60, 230],
-        "3. Media": [241, 196, 15, 230],
-        "4. Boa": [46, 204, 113, 230],
-        "5. Excelente": [142, 68, 173, 230],
+        "2. Ruim / Poor": [231, 76, 60, 230],
+        "3. Média / Fair": [241, 196, 15, 230],
+        "4. Boa / Good": [46, 204, 113, 230],
+        "5. Excelente / Excellent": [142, 68, 173, 230],
         "Sem Info": [128, 128, 128, 160],
     }
 
-    df['base_color'] = df['condicao_da_lavoura'].apply(
-        lambda x: color_map.get(x, color_map["Sem Info"])
-    )
+    def get_color(val, i):
+        return color_map.get(val, color_map["Sem Info"])[i]
+
+    if not df.empty and 'condicao_da_lavoura' in df.columns:
+        df['cr'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 0))
+        df['cg'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 1))
+        df['cb'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 2))
+        df['ca'] = df['condicao_da_lavoura'].apply(lambda x: get_color(x, 3))
+    else:
+        df['cr'], df['cg'], df['cb'], df['ca'] = 128, 128, 128, 160
 
     df.insert(0, 'ID', range(1, len(df) + 1))
     return df
@@ -76,41 +112,46 @@ def get_image_index():
     return index
 
 
-df = load_data()
+df = load_data(CSV_FILE)
 image_index = get_image_index()
 
 # --- 2. SIDEBAR (LEGEND & FILTERS) ---
 st.sidebar.markdown("### Legend - Condition")
 st.sidebar.markdown("""
-- 🔴 **1. Muito Ruim** (Very Poor)
-- 🟠 **2. Ruim** (Poor)
-- 🟡 **3. Media** (Average)
-- 🟢 **4. Boa** (Good)
-- 🟣 **5. Excelente** (Excellent)
+- 🔴 **2. Ruim / Poor**
+- 🟡 **3. Média / Fair**
+- 🟢 **4. Boa / Good**
+- 🟣 **5. Excelente / Excellent**
 - ⚪ **Sem Info** (No Information)
 """)
 
-st.sidebar.header("Crop Filters")
+if not df.empty:
+    st.sidebar.header("Crop Filters")
 
-condition = st.sidebar.multiselect(
-    "Condition:",
-    options=sorted(df["condicao_da_lavoura"].unique()),
-    default=df["condicao_da_lavoura"].unique()
-)
+    condition = st.sidebar.multiselect(
+        "Condition:",
+        options=sorted(df["condicao_da_lavoura"].unique()) if "condicao_da_lavoura" in df.columns else [],
+        default=df["condicao_da_lavoura"].unique().tolist() if "condicao_da_lavoura" in df.columns else []
+    )
 
-stages = st.sidebar.multiselect(
-    "Growth Stage:",
-    options=sorted(df["estadio_fenologico"].unique()),
-    default=df["estadio_fenologico"].unique()
-)
+    stages = st.sidebar.multiselect(
+        "Growth Stage:",
+        options=sorted(df["estadio_fenologico"].unique()) if "estadio_fenologico" in df.columns else [],
+        default=df["estadio_fenologico"].unique().tolist() if "estadio_fenologico" in df.columns else []
+    )
 
-df_filtered = df[
-    (df["condicao_da_lavoura"].isin(condition)) &
-    (df["estadio_fenologico"].isin(stages))
-    ].copy().reset_index(drop=True)
+    if condition and stages:
+        df_filtered = df[
+            (df["condicao_da_lavoura"].isin(condition)) &
+            (df["estadio_fenologico"].isin(stages))
+            ].copy().reset_index(drop=True)
+    else:
+        df_filtered = df.copy().reset_index(drop=True)
+else:
+    df_filtered = df.copy()
 
 st.sidebar.divider()
-st.sidebar.metric("Filtered Samples", len(df_filtered))
+st.sidebar.metric("Total Samples", len(df_filtered))
 
 # --- 3. SESSION STATE ---
 if "selected_idx" not in st.session_state:
@@ -141,30 +182,47 @@ if selected_idx is not None and selected_idx >= len(df_filtered):
 
 
 def render_map(data, sel_idx):
+    if data.empty:
+        view_state = pdk.ViewState(latitude=-15.78, longitude=-47.93, zoom=4, pitch=0)
+        return pdk.Deck(initial_view_state=view_state)
+
     display = data.copy()
-    display['fill_color'] = display['base_color']
     display['point_radius'] = 15000
+
+    # ✅ Colunas r/g/b/a já são inteiros puros — sem risco de corrupção Arrow
+    display['r'] = display['cr']
+    display['g'] = display['cg']
+    display['b'] = display['cb']
+    display['a'] = display['ca']
+
     if sel_idx is not None and 0 <= sel_idx < len(display):
-        display['fill_color'] = display['base_color'].apply(lambda c: [c[0], c[1], c[2], 70])
-        display.at[sel_idx, 'fill_color'] = [255, 255, 255, 255]
+        display['a'] = 70  # desfoca todos
+        display.at[sel_idx, 'r'] = 255
+        display.at[sel_idx, 'g'] = 255
+        display.at[sel_idx, 'b'] = 255
+        display.at[sel_idx, 'a'] = 255
         display.at[sel_idx, 'point_radius'] = 32000
 
     view_state = pdk.ViewState(
-        latitude=data['latitude'].mean() if not data.empty else -15.78,
-        longitude=data['longitude'].mean() if not data.empty else -47.93,
+        latitude=data['latitude'].mean(),
+        longitude=data['longitude'].mean(),
         zoom=4, pitch=0,
     )
 
     layer = pdk.Layer(
         "ScatterplotLayer", display,
         get_position='[longitude, latitude]',
-        get_fill_color='fill_color',
+        get_fill_color='[r, g, b, a]',  # ✅ Leitura direta de colunas inteiras
         get_radius='point_radius',
         pickable=True, auto_highlight=True, radius_min_pixels=6,
     )
 
+    tooltip_html = "<b>Location:</b> {municipio}<br/><b>Condition:</b> {condicao_da_lavoura}"
+    if "produtividade_estimada_clculo_automtico_sacasha" in data.columns:
+        tooltip_html += "<br/><b>Yield:</b> {produtividade_estimada_clculo_automtico_sacasha} sc/ha"
+
     return pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={
-        "html": "<b>Location:</b> {localidade_}<br/><b>Condition:</b> {condicao_da_lavoura}<br/><b>Yield:</b> {graosha_k} K grains/ha",
+        "html": tooltip_html,
         "style": {"backgroundColor": "#1a1a2e", "color": "white", "borderRadius": "8px"}
     })
 
@@ -173,32 +231,49 @@ st.subheader("Spatial Visualization")
 st.pydeck_chart(render_map(df_filtered, selected_idx), on_select=on_map_select, selection_mode="single-object",
                 key="pydeck_map")
 
-# --- 5. DETAILS (FORMATTING RESTORED) ---
+# --- 5. DETAILS ---
 st.divider()
 if selected_idx is not None and selected_idx < len(df_filtered):
     selected_row = df_filtered.iloc[selected_idx]
 
     badge_colors = {
-        "1. Muito Ruim": "#8B0000", "2. Ruim": "#E74C3C", "3. Media": "#F1C40F",
-        "4. Boa": "#2ECC71", "5. Excelente": "#8E44AD", "Sem Info": "#808080"
+        "2. Ruim / Poor": "#E74C3C",
+        "3. Média / Fair": "#F1C40F",
+        "4. Boa / Good": "#2ECC71",
+        "5. Excelente / Excellent": "#8E44AD",
+        "Sem Info": "#808080",
     }
-    color = badge_colors.get(selected_row['condicao_da_lavoura'], "#888")
+    condition_val = selected_row.get('condicao_da_lavoura', 'Sem Info')
+    color = badge_colors.get(condition_val, "#888")
 
     st.markdown('<div class="detail-card">', unsafe_allow_html=True)
     c1, c2 = st.columns([1, 1])
 
     with c1:
+        location = selected_row.get('municipio', selected_row.get('localidade_', 'Unknown'))
         st.markdown(f"""
             <div style="background:{color}22;border-left:4px solid {color};padding:12px;border-radius:6px;margin-bottom:15px;">
                 <span style="font-weight:700;font-size:18px;">📍 Sample ID {int(selected_row['ID'])}</span><br/>
-                <span style="font-size:14px;opacity:0.8;">{selected_row['localidade_']}</span>
+                <span style="font-size:14px;opacity:0.8;">{location}</span>
             </div>
         """, unsafe_allow_html=True)
 
-        # O Visual formatado que você gosta (com backticks):
-        st.markdown(f"**Condition:** `{selected_row['condicao_da_lavoura']}`")
-        st.markdown(f"**Growth Stage:** `{selected_row['estadio_fenologico']}`")
-        st.markdown(f"**Estimated Yield:** `{selected_row.get('graosha_k', 0):.2f} K grains/ha`")
+        if 'condicao_da_lavoura' in selected_row.index:
+            st.markdown(f"**Condition:** `{selected_row['condicao_da_lavoura']}`")
+        if 'estadio_fenologico' in selected_row.index:
+            st.markdown(f"**Growth Stage:** `{selected_row['estadio_fenologico']}`")
+
+        # ✅ Exibir valor ajustado
+        yield_adjusted = selected_row.get('produtividade_estimada_clculo_automtico_sacasha')
+
+        if yield_adjusted and pd.notna(yield_adjusted):
+            try:
+                adj_val = float(yield_adjusted)
+                st.markdown(f"**Estimated Yield:** `{adj_val:.2f}`")
+            except:
+                st.markdown("**Estimated Yield:** Not available")
+        else:
+            st.markdown("**Estimated Yield:** Not available")
 
         obs_raw = selected_row.get("observacoes", "")
         obs = "No observations available." if pd.isna(obs_raw) or str(obs_raw).strip() in ["", "nan"] else str(
@@ -211,9 +286,19 @@ if selected_idx is not None and selected_idx < len(df_filtered):
         """, unsafe_allow_html=True)
 
     with c2:
-        foto_ids = [id.strip() for id in str(selected_row.get("fotos", "")).split(",") if id.strip() not in ["nan", ""]]
-        foto_paths = [image_index.get(id) for id in foto_ids]
-        valid_fotos = [(id, path) for id, path in zip(foto_ids, foto_paths) if path]
+        all_foto_ids = []
+
+        if "fotos" in selected_row.index:
+            fotos_raw = str(selected_row.get("fotos", ""))
+            all_foto_ids.extend([id.strip() for id in fotos_raw.split(",") if id.strip() not in ["nan", ""]])
+
+        for col in ["fotos_das_espigas_cap_do_carro", "foto_das_linhas", "fotos_adicionais"]:
+            if col in selected_row.index:
+                fotos_raw = str(selected_row.get(col, ""))
+                all_foto_ids.extend([id.strip() for id in fotos_raw.split(",") if id.strip() not in ["nan", ""]])
+
+        foto_paths = [image_index.get(id) for id in all_foto_ids]
+        valid_fotos = [(id, path) for id, path in zip(all_foto_ids, foto_paths) if path]
 
         if valid_fotos:
             if len(valid_fotos) > 1:
@@ -227,4 +312,3 @@ if selected_idx is not None and selected_idx < len(df_filtered):
     st.markdown('</div>', unsafe_allow_html=True)
 else:
     st.info("🗺️ Select a point on the map to view detailed field information and photos.")
-

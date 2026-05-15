@@ -23,6 +23,27 @@ FOTOS_DIR = Path("fotos")
 CSV_FILE = "brazil_2026_winter_corn_croptour.csv"
 
 
+# --- FUNÇÕES AUXILIARES ---
+
+def adjust_yield(yield_value):
+    """
+    Aplica a fórmula de ajuste de produtividade aos valores de sacas por hectare.
+
+    Fórmula: y = ((0,04668x + 0,16508) × 1000) / 60
+
+    Onde:
+        x: valor original de produtividade (sacas/hectare)
+        y: valor ajustado após a transformação
+
+    Argumentos:
+        yield_value: float ou pd.Series - valor(es) de produtividade a transformar
+
+    Retorna:
+        float ou pd.Series - valor(es) transformados pela fórmula
+    """
+    return (((0.04668 * yield_value) + 0.16508) * 1000) / 60
+
+
 # --- 1. DATA LOADING ---
 @st.cache_data
 def load_data(csv_file):
@@ -57,13 +78,31 @@ def load_data(csv_file):
             .replace(["nan", "None", "", "Nan", "NaN"], "Sem Info")
         )
 
+    # ✅ AJUSTE DE PRODUTIVIDADE
+    # Fórmula: y = ((0,04668x + 0,16508) * 1000) / 60
+    # Aplica a transformação linear com conversão de unidades a todos os valores de produtividade
+    if 'produtividade_estimada_clculo_automtico_sacasha' in df.columns:
+        # Converte para numérico (valores inválidos viram NaN)
+        df['produtividade_estimada_clculo_automtico_sacasha'] = pd.to_numeric(
+            df['produtividade_estimada_clculo_automtico_sacasha'],
+            errors='coerce'
+        )
+
+        # ✅ Armazena o valor ORIGINAL em uma coluna separada para verificação
+        df['produtividade_original_sacasha'] = df['produtividade_estimada_clculo_automtico_sacasha'].copy()
+
+        # Aplica a função de ajuste de produtividade aos valores
+        df['produtividade_estimada_clculo_automtico_sacasha'] = adjust_yield(
+            df['produtividade_estimada_clculo_automtico_sacasha']
+        )
+
     # ✅ Cores como colunas inteiras separadas — Arrow-safe, sem risco de corrupção
     color_map = {
-        "2. Ruim / Poor":           [231, 76,  60,  230],
-        "3. Média / Fair":          [241, 196, 15,  230],
-        "4. Boa / Good":            [46,  204, 113, 230],
-        "5. Excelente / Excellent": [142, 68,  173, 230],
-        "Sem Info":                 [128, 128, 128, 160],
+        "2. Ruim / Poor": [231, 76, 60, 230],
+        "3. Média / Fair": [241, 196, 15, 230],
+        "4. Boa / Good": [46, 204, 113, 230],
+        "5. Excelente / Excellent": [142, 68, 173, 230],
+        "Sem Info": [128, 128, 128, 160],
     }
 
     def get_color(val, i):
@@ -123,7 +162,7 @@ if not df.empty:
         df_filtered = df[
             (df["condicao_da_lavoura"].isin(condition)) &
             (df["estadio_fenologico"].isin(stages))
-        ].copy().reset_index(drop=True)
+            ].copy().reset_index(drop=True)
     else:
         df_filtered = df.copy().reset_index(drop=True)
 else:
@@ -197,8 +236,8 @@ def render_map(data, sel_idx):
     )
 
     tooltip_html = "<b>Location:</b> {municipio}<br/><b>Condition:</b> {condicao_da_lavoura}"
-    if "produtividade_estimada_clculo_automtico_kghectare" in data.columns:
-        tooltip_html += "<br/><b>Yield:</b> {produtividade_estimada_clculo_automtico_kghectare} kg/ha"
+    if "produtividade_estimada_clculo_automtico_sacasha" in data.columns:
+        tooltip_html += "<br/><b>Yield:</b> {produtividade_estimada_clculo_automtico_sacasha} sc/ha"
 
     return pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={
         "html": tooltip_html,
@@ -216,11 +255,11 @@ if selected_idx is not None and selected_idx < len(df_filtered):
     selected_row = df_filtered.iloc[selected_idx]
 
     badge_colors = {
-        "2. Ruim / Poor":           "#E74C3C",
-        "3. Média / Fair":          "#F1C40F",
-        "4. Boa / Good":            "#2ECC71",
+        "2. Ruim / Poor": "#E74C3C",
+        "3. Média / Fair": "#F1C40F",
+        "4. Boa / Good": "#2ECC71",
         "5. Excelente / Excellent": "#8E44AD",
-        "Sem Info":                 "#808080",
+        "Sem Info": "#808080",
     }
     condition_val = selected_row.get('condicao_da_lavoura', 'Sem Info')
     color = badge_colors.get(condition_val, "#888")
@@ -242,10 +281,13 @@ if selected_idx is not None and selected_idx < len(df_filtered):
         if 'estadio_fenologico' in selected_row.index:
             st.markdown(f"**Growth Stage:** `{selected_row['estadio_fenologico']}`")
 
-        yield_val = selected_row.get('graosha_k', selected_row.get('produtividade_estimada_clculo_automtico_kghectare'))
-        if yield_val:
+        # ✅ Exibir valor ajustado
+        yield_adjusted = selected_row.get('produtividade_estimada_clculo_automtico_sacasha')
+
+        if yield_adjusted and pd.notna(yield_adjusted):
             try:
-                st.markdown(f"**Estimated Yield:** `{float(yield_val):.2f} kg/ha`")
+                adj_val = float(yield_adjusted)
+                st.markdown(f"**Estimated Yield:** `{adj_val:.2f}`")
             except:
                 st.markdown("**Estimated Yield:** Not available")
         else:
