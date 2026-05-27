@@ -73,10 +73,10 @@ def load_data(csv_file):
 
         # Substitui os valores originais pelos ajustados conforme a fórmula correta
         # com conversão de unidades (multiplicar por 1000 e dividir por 60)
-        df['produtividade_estimada_clculo_automtico_sacasha'] = (
-                                                                        ((0.04668 * df[
-                                                                            'produtividade_estimada_clculo_automtico_sacasha']) + 0.16508) * 1000
-                                                                ) / 60
+        # df['produtividade_estimada_clculo_automtico_sacasha'] = (
+        #                                                                 ((0.04668 * df[
+        #                                                                     'produtividade_estimada_clculo_automtico_sacasha']) + 0.16508) * 1000
+        #                                                         ) / 60
 
     # ✅ Cores como colunas inteiras separadas — Arrow-safe, sem risco de corrupção
     color_map = {
