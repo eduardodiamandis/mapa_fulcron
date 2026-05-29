@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ad8053cb-4b72-4e4f-b3b8-366243f4811e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/goias_version.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/brazil_2026_winter_corn_croptour.csv" beforeDir="false" afterPath="$PROJECT_DIR$/brazil_2026_winter_corn_croptour.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
